@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from collections.abc import Iterable, Sequence
 
 from slugsmith.special import apply_language
 from slugsmith.transliterate import transliterate
 
 # Pre-compiled default regex patterns
 _DEFAULT_ALLOWED_RE = re.compile(r"[^\w\s-]", re.UNICODE)
+_UNICODE_ALLOWED_RE = re.compile(r"[^\w\s-]", re.UNICODE)
 _WHITESPACE_SEP_RE = re.compile(r"[-\s]+")
 
 
@@ -20,9 +22,9 @@ def slugify(
     max_length: int = 0,
     word_boundary: bool = False,
     save_order: bool = False,
-    stopwords: tuple[str, ...] = (),
+    stopwords: Iterable[str] = (),
     regex_pattern: str | None = None,
-    replacements: list[tuple[str, str]] | None = None,
+    replacements: Sequence[Sequence[str]] | None = None,
     allow_unicode: bool = False,
     lang: str | None = None,
 ) -> str:
@@ -34,10 +36,12 @@ def slugify(
         lowercase: Convert to lowercase. Default ``True``.
         max_length: Maximum length of the slug (0 = unlimited).
         word_boundary: Truncate at word boundary when *max_length* is set.
-        save_order: Preserve original word order when filtering *stopwords*.
-        stopwords: Words to remove from the slug.
+        save_order: Accepted for python-slugify compatibility (word order is
+            always preserved).
+        stopwords: Words to remove from the slug. Accepts any iterable of strings.
         regex_pattern: Custom regex pattern for allowed characters.
-        replacements: List of ``(old, new)`` literal substitutions applied first.
+        replacements: Sequence of ``(old, new)`` pairs applied first. Accepts
+            lists of tuples or lists of lists.
         allow_unicode: Keep Unicode characters in the slug.
         lang: Language code for language-specific transliteration.
     """
@@ -63,7 +67,7 @@ def slugify(
         slug = re.sub(regex_pattern, "", slug)
     else:
         if allow_unicode:
-            slug = re.sub(r"[^\w\s-]", "", slug, flags=re.UNICODE)
+            slug = _UNICODE_ALLOWED_RE.sub("", slug)
         else:
             slug = _DEFAULT_ALLOWED_RE.sub("", slug)
 
