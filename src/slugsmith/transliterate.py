@@ -168,9 +168,15 @@ def transliterate(text: str) -> str:
         elif ord(char) < 128:
             result.append(char)
         else:
-            # NFKD decompose this character
+            # NFKD decompose, strip combining marks, re-check CHAR_MAP
             decomposed = unicodedata.normalize("NFKD", char)
-            ascii_part = decomposed.encode("ascii", "ignore").decode("ascii")
-            result.append(ascii_part)
+            for dc in decomposed:
+                if dc in CHAR_MAP:
+                    result.append(CHAR_MAP[dc])
+                elif ord(dc) < 128:
+                    result.append(dc)
+                elif unicodedata.category(dc) in ("Mn", "Mc"):
+                    # Skip combining marks (accents, diacritics)
+                    continue
 
     return "".join(result)

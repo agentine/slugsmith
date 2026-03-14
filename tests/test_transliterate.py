@@ -55,6 +55,28 @@ class TestGreek:
         result = slugify("αβγ")
         assert result.isascii()
 
+    def test_accented_greek(self) -> None:
+        # ά (U+03AC) decomposes to α + combining acute
+        assert transliterate("Ελληνικά") == "Ellinika"
+
+    @pytest.mark.parametrize(
+        "char,expected",
+        [
+            ("ά", "a"),  # U+03AC -> α + accent
+            ("έ", "e"),  # U+03AD -> ε + accent
+            ("ή", "i"),  # U+03AE -> η + accent
+            ("ί", "i"),  # U+03AF -> ι + accent
+            ("ό", "o"),  # U+03CC -> ο + accent
+            ("ύ", "y"),  # U+03CD -> υ + accent
+            ("ώ", "o"),  # U+03CE -> ω + accent
+        ],
+    )
+    def test_accented_greek_chars(self, char: str, expected: str) -> None:
+        assert transliterate(char) == expected
+
+    def test_slugify_accented_greek(self) -> None:
+        assert slugify("Ελληνικά") == "ellinika"
+
 
 class TestSymbols:
     def test_copyright(self) -> None:
