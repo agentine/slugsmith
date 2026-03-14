@@ -104,6 +104,21 @@ slugify("říjen", lang="cs")     # "rijen"     (Czech: ř→r, í→i)
 
 Supported language codes: `de` (German), `tr` (Turkish), `pl` (Polish), `cs` (Czech), `fi` (Finnish), `sv` (Swedish).
 
+### Script coverage
+
+slugsmith's built-in transliteration covers a wide range of Unicode scripts without any external dependencies:
+
+| Script | Coverage | Example |
+|--------|----------|---------|
+| Latin Extended | Full diacritics (NFKD + explicit map) | `café` → `cafe` |
+| Cyrillic | Russian + Ukrainian | `Привет` → `Privet`, `їжак` → `yizhak` |
+| Greek | Modern Greek alphabet | `Ελληνικά` → `Ellinika` |
+| Arabic | Basic alphabet (28 letters) | `مرحبا` → `mrhba` |
+| Hebrew | Basic alphabet (22 letters + finals) | `שלום` → `shalom` |
+| Symbols | Common currency and typographic symbols | `€100` → `euro100`, `™` → `tm` |
+
+Characters not covered by the table are decomposed via NFKD normalisation; if decomposition yields ASCII, that is used. Remaining non-ASCII characters are silently dropped (same behaviour as `text-unidecode`).
+
 ### Custom regex
 
 ```python
