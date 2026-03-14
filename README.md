@@ -47,10 +47,10 @@ Generate a URL-friendly slug from `text`.
 | `lowercase` | `bool` | `True` | Convert to lowercase |
 | `max_length` | `int` | `0` | Max slug length (0 = unlimited) |
 | `word_boundary` | `bool` | `False` | Truncate at word boundary when `max_length` is set |
-| `save_order` | `bool` | `False` | Preserve original word order when filtering stopwords |
-| `stopwords` | `tuple[str, ...]` | `()` | Words to remove from the slug |
+| `save_order` | `bool` | `False` | Accepted for python-slugify compatibility (word order is always preserved) |
+| `stopwords` | `Iterable[str]` | `()` | Words to remove from the slug |
 | `regex_pattern` | `str \| None` | `None` | Custom regex pattern for allowed characters |
-| `replacements` | `list[tuple[str, str]] \| None` | `None` | Literal substitutions applied before transliteration |
+| `replacements` | `Sequence[Sequence[str]] \| None` | `None` | Sequence of `(old, new)` pairs applied before transliteration; accepts lists of tuples or lists of lists |
 | `allow_unicode` | `bool` | `False` | Keep Unicode characters in the slug |
 | `lang` | `str \| None` | `None` | Language code for language-specific transliteration |
 
