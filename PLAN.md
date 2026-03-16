@@ -38,7 +38,7 @@ slugsmith/
 
 4. **Performance** — Optimize hot paths. Avoid unnecessary regex compilation on each call (pre-compile patterns). Target ≥2x throughput vs python-slugify.
 
-5. **Modern Python** — Require Python 3.9+. Use modern string/regex features.
+5. **Modern Python** — Require Python 3.10+. Use modern string/regex features.
 
 6. **MIT licensed** — Clear, permissive license with no GPL dependencies.
 
